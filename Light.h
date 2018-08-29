@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "Var.h"
+#include "Config.h"
 
 // Klasse Light
 // Abstraktes Modell eines Buttons

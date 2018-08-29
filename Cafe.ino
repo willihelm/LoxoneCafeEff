@@ -8,6 +8,8 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <ArduinoHttpClient.h>
+
+#include "Config.h"
 #include "Var.h"
 #include "Light.h"
 
@@ -20,29 +22,12 @@
 int scanCount = 0;
 
 // Array zum Speichern der Objekte
-Light light[BUTTON_COUNT];
-
-// Liste der Licht-Bezeichnungen aus Loxone, HTML encoded
-// %20 -> " "
-// %2E -> "."
-String lightNames[] = {
-    "Cafe%201%2E1",       // Cafe 1.1
-    "Cafe%201%2E2",       // Cafe 1.2
-    "Cafe%201%2E3",       // Cafe 1.3
-    "Cafe%202%2E1",       // Cafe 2.1
-    "Cafe%202%2E2",       // Cafe 2.2
-    "Cafe%202%2E3",       // Cafe 2.3
-    "Cafe%203%2E1",       // Cafe 3.1
-    "Cafe%203%2E2",       // Cafe 3.2
-    "Cafe%203%2E3",       // Cafe 3.3
-    "Cafe%20indirekt",    // Cafe indirekt
-    "Theke%20ambient"     // Theke ambient
-};
+Light light[LIGHT_COUNT];
   
 // Setup Connection
 char url[] = LOXONE_URL;
 byte mac[] = MAC_ADDRESS;
-IPAddress ip(192,168,2,145);
+IPAddress ip(FALLBACK_IP);
 EthernetClient client;
 HttpClient http = HttpClient(client, url, LOXONE_PORT);
 
@@ -67,7 +52,7 @@ void setup()
   Serial.println("Connected!");
   Serial.println("setup lights...");
   int pin = START_PIN;
-  for (int i = 0; i < BUTTON_COUNT; i++)
+  for (int i = 0; i < LIGHT_COUNT; i++)
   {
     int led = pin++;
     int button = pin++;
@@ -96,7 +81,7 @@ void loop()
 // Methode zum Updaten der LEDs per Webrequest
 void updateLeds(HttpClient http)
 {
-  for (int i = 0; i < BUTTON_COUNT; i++)
+  for (int i = 0; i < LIGHT_COUNT; i++)
   {
     light[i].updateLed(http);
     scanButtons();
@@ -107,7 +92,7 @@ void updateLeds(HttpClient http)
 // Methode zum Scan der Input-Buttons
 void scanButtons()
 {
-  for (int i = 0; i < BUTTON_COUNT; i++)
+  for (int i = 0; i < LIGHT_COUNT; i++)
   {
     //Serial.print(".");
     if (!digitalRead(light[i].getButtonPin()))
