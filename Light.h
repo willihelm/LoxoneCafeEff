@@ -1,6 +1,3 @@
-#include <Arduino.h>
-#include "Config.h"
-
 // Klasse Light
 // Abstraktes Modell eines Buttons
 // Eigenschaften:
