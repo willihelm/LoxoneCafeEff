@@ -102,8 +102,6 @@ void scanButtons() {
     if (!digitalRead(light[i].getButtonPin())) {
       Serial.print("Light Button pin: ");
       Serial.println(light[i].getButtonPin());
-
-      
       
       if (light[i].isOn())
       {
@@ -114,6 +112,7 @@ void scanButtons() {
         light[i].turnOn(http);
       }
       //light[i].updateLed(http);
+      szeneLedsOff();
     }
   }
 
