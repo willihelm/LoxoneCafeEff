@@ -1,4 +1,4 @@
-// Vorlage fuer die Datei "Var.h"
+// Vorlage fuer die Datei "Config.h"
 // Diese Angaben werden im Programm verwendet
 
 // Loxone Daten
