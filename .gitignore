@@ -1,5 +1,4 @@
 # Variablen nicht in git speichern
-Var.h
 Config.h
 
 # VS Code Dateien ausschließen
