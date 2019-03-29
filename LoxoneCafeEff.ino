@@ -67,6 +67,8 @@ void setup()
     int button = pin[cPin++];
     scene[i].setup(scenes[i], led, button);
   }
+  
+  startSequenz();
 }
 
 void loop()
@@ -76,12 +78,12 @@ void loop()
   scanButtons();
 
   // nach 10000 button scans update led status
-  scanCount++;
-  if (scanCount >= 100000) {
-    Serial.println("updateLeds...");
-    updateLeds(http);
-    scanCount = 0;
-  }
+  // scanCount++;
+  // if (scanCount >= 100000) {
+  //   Serial.println("updateLeds...");
+  //   updateLeds(http);
+  //   scanCount = 0;
+  // }
 }
 
 // globale Methoden
@@ -112,7 +114,6 @@ void scanButtons() {
         light[i].turnOn(http);
       }
       //light[i].updateLed(http);
-      szeneLedsOff();
     }
   }
 
@@ -122,18 +123,27 @@ void scanButtons() {
       Serial.print("Scene Button pin: ");
       Serial.println(scene[i].getButtonPin());
       int* sc = scene[i].get();
-      szeneLedsOff();
-      if (sceneCount[i] == 0) {
+      if (sceneCount[i] == 0) { // alles aus
         scene[i].turnLedOn();
         allOff(false);
         scene[i].turnLedOff();
+        szeneLedsOff();
       } else {
-        scene[i].turnLedOn();
-        allOff(true);  
+        if (scene[i].isOn()) {
+          scene[i].turnLedOff();
+          for (int j = 0; j < sceneCount[i]; j++) {
+            light[sc[j]].turnOff(http);
+          }
+        } else {
+          scene[i].turnLedOn();
+          // allOff(true);
+          for (int j = 0; j < sceneCount[i]; j++) {
+            light[sc[j]].turnOn(http);
+          }
+        }
       }
-      
-      for (int j = 0; j < sceneCount[i]; j++) {
-        light[sc[j]].turnOn(http);
+      while(!digitalRead(scene[i].getButtonPin())) {
+        // warte bis losgelassen
       }
     }
   }
@@ -159,3 +169,29 @@ void szeneLedsOff() {
   }
 }
 
+void startSequenz() { // nur zur show
+  int ledCount = (LIGHT_COUNT + SCENE_COUNT) * 2;
+  int leds[ledCount];
+  int j = 0;
+  for (int i = 0; i < ledCount; i += 2) {
+    leds[j++] = pin[i];
+    digitalWrite(pin[i], HIGH);
+    delay(30);
+  }
+  delay(100);
+  for (j; j >= 0; j--) {
+    digitalWrite(leds[j], LOW);
+    delay(30);
+  }
+
+  for (int i = 0; i < 5; i++){
+    for (int i = 0; i < ledCount; i += 2) {
+      digitalWrite(pin[i], HIGH);
+    }
+    delay(100);
+    for (int i = 0; i < ledCount; i += 2) {
+      digitalWrite(pin[i], LOW);
+    }
+    delay(100);
+  }
+}

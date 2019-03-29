@@ -44,12 +44,19 @@ public:
   }
 
 public:
+  bool isOn() {
+    return on;
+  }
+
+public:
   void turnLedOff() {
     digitalWrite(ledPin, LOW);  
+    on = false;
   }
 
 public:
   void turnLedOn() {
-    digitalWrite(ledPin, HIGH);  
+    digitalWrite(ledPin, HIGH);
+    on = true;
   }
 };
