@@ -28,9 +28,12 @@ Light light[LIGHT_COUNT];
 Scene scene[SCENE_COUNT];
   
 // Setup Connection
+byte mac[] = {  0x90, 0xA2, 0xDA, 0x00, 0x22, 0x11 };
+byte ip[] = { FALLBACK_IP };
+byte gateway[] = { GATEWAY };
+byte mask[] =  { 255, 255,0,0 };
+byte server[] = {  LOXONE_SERVER };
 char url[] = LOXONE_URL;
-byte mac[] = MAC_ADDRESS;
-IPAddress ip(FALLBACK_IP);
 EthernetClient client;
 HttpClient http = HttpClient(client, url, LOXONE_PORT);
 
@@ -40,12 +43,12 @@ void setup()
 {
   Serial.begin(9600);
   Serial.println("setup...");
-  Serial.println(ip);
+  //Serial.println(ip);
   //if (Ethernet.begin(mac) == 0) {
     //Serial.println("Failed to configure Ethernet using DHCP");
     // no point in carrying on, so do nothing forevermore:
     // try to congifure using IP address instead of DHCP:
-    Ethernet.begin(mac, ip);
+    Ethernet.begin(mac, ip, gateway,mask);
   //}
 
   Serial.print("IP Address: ");
