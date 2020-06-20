@@ -13,3 +13,9 @@
 
 // IP Adresse, wird verwendet, wenn keine IP vom DHCP Server bezogen wurde
 #define FALLBACK_IP 192,168,1,1
+
+// Gateway oder Router
+#define GATEWAY "192.168.178.1"
+
+// Netzwerkmaske
+#define MASK "255, 255, 255, 0"
